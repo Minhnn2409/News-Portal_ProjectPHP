@@ -56,7 +56,8 @@
                             @foreach($posts as $post)
                                 <tr>
                                     <td> {{$i++}}</td>
-                                    <td> {{$post->title_en}} | {{$post->title_vie}}</td>
+                                    <td> {{\Illuminate\Support\Str::limit($post->title_en, 10) }}
+                                        | {{\Illuminate\Support\Str::limit($post->title_vie, 10)}}</td>
                                     <td> {{$post->category_en}} | {{$post->category_vie}}</td>
                                     <td> {{$post->district_en}} | {{$post->district_vie}}</td>
                                     <td><img src="{{$post->image}}" style="width: 50px;height: 50px" alt="Anh post"/>

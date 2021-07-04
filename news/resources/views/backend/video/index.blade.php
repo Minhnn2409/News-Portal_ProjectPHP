@@ -55,7 +55,7 @@
                                     <td> {{$i++}}</td>
                                     <td> {{$video->title}}</td>
                                     <td><small
-                                            class="badge badge-info">{{($video->type == 1) ? 'Big Image' : 'Small Image'}}</small>
+                                            class="badge badge-info">{{($video->type == 1) ? 'Big Video' : 'Small Video'}}</small>
                                     </td>
                                     <td>
                                         <a href="{{route('videos.edit', $video->id)}}"

@@ -18,7 +18,7 @@ class PostController extends Controller
             ->join("districts", "posts.district_id", "districts.id")
             ->join("subdistricts", "posts.subdistrict_id", "subdistricts.id")
             ->select("posts.*", "categories.category_en", "categories.category_vie", "districts.district_en", "districts.district_vie")
-            ->orderByDesc("posts.id")->paginate(5);
+            ->orderByDesc("posts.id")->paginate(10);
         return view('backend.post.index', compact('posts'));
     }
 

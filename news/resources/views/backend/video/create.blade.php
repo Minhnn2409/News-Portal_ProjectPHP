@@ -33,13 +33,23 @@
                     <form class="forms-sample" method="post" action="{{route('videos.store')}}">
                         @csrf
                         <div class="form-group">
-                            <label for="exampleInputUsername1">Video Title</label>
-                            <input type="text" class="form-control" id="exampleInputUsername1" name="title"
-                                   placeholder="Please type title">
+                            <label for="exampleInputUsername1">Video English Title</label>
+                            <input type="text" class="form-control" id="exampleInputUsername1" name="title_en"
+                                   placeholder="Please English type title">
                         </div>
-                        @error('title')
+                        @error('title_en')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
+
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">Video Vietnamese Title</label>
+                            <input type="text" class="form-control" id="exampleInputUsername1" name="title_vie"
+                                   placeholder="Please Vietnamese type title">
+                        </div>
+                        @error('title_vie')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+
                         <div class="form-group">
                             <label for="exampleInputEmail1">Video Embed Code</label>
                             <input type="text" class="form-control" id="exampleInputEmail1" name="embed_code"

@@ -11,9 +11,17 @@
 
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <label for="exampleInputName1">Title</label>
+                            <label for="exampleInputName1">English Title</label>
                             <input type="text" class="form-control" id="exampleInputName1"
-                                   placeholder="Type title" name="title" value="{{$photo->title}}">
+                                   placeholder="Type English title" name="title" value="{{$photo->title_en}}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="exampleInputName1">Vietnamese Title</label>
+                            <input type="text" class="form-control" id="exampleInputName1"
+                                   placeholder="Type Vietnamese title" name="title" value="{{$photo->title_vie}}">
                         </div>
                     </div>
 

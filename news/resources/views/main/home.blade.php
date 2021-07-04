@@ -50,76 +50,53 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-9 col-sm-8">
+                    @php
+                        $firstSectionThumb = \Illuminate\Support\Facades\DB::table('posts')->where('first_section_thumbnail', 1)->first();
+                    @endphp
                     <div class="row">
                         <div class="col-md-1 col-sm-1 col-lg-1"></div>
                         <div class="col-md-10 col-sm-10">
                             <div class="lead-news">
-                                <div class="service-img"><a href="#"><img
-                                            src="{{asset('frontend/assets/img/news.jpg')}}" width="800px"
+                                <div class="service-img"><a
+                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $firstSectionThumb->id)}}"><img
+                                            src="{{$firstSectionThumb->image}}" width="800px"
                                             alt="Notebook"></a></div>
                                 <div class="content">
-                                    <h4 class="lead-heading-01"><a href="#">Modi invited to join March 26 prog in
-                                            person</a>
-                                    </h4>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="lead-heading-01"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $firstSectionThumb->id)}}">{{$firstSectionThumb->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="lead-heading-01"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $firstSectionThumb->id)}}">{{$firstSectionThumb->title_vie}}</a>
+                                        </h4>
+                                    @endif
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                    @php
+                        $firstSectionPosts = \Illuminate\Support\Facades\DB::table('posts')->where('first_section', 1)->limit(8)->get();
+                    @endphp
                     <div class="row">
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">TCB to sell potato at Tk 25 per kg: Minister</a></h4>
+                        @foreach($firstSectionPosts as $firstSectionPost)
+                            <div class="col-md-3 col-sm-3">
+                                <div class="top-news">
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $firstSectionPost->id)}}"><img
+                                            src="{{asset($firstSectionPost->image)}}" alt="Notebook"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $firstSectionPost->id)}}">{{$firstSectionPost->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $firstSectionPost->id)}}">{{\Illuminate\Support\Str::limit($firstSectionPost->title_vie, 80)}}</a>
+                                        </h4>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">TCB to sell potato at Tk 25 per kg: Minister</a></h4>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">TCB to sell potato at Tk 25 per kg: Minister</a></h4>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">Working to provide better future for children: PM</a>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">Bangladesh sees 14 more deaths, 1274 fresh cases</a>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">FFs’ monthly honorarium to be raised Tk 20,000</a>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">Working to provide better future for children: PM</a>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-3">
-                            <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">Working to provide better future for children: PM</a>
-                                </h4>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
 
                     <!-- add-start -->
@@ -129,78 +106,135 @@
                         </div>
                     </div><!-- /.add-close -->
 
-                    <!-- news-start -->
+                @php
+                    $firstCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'INTERNATIONAL')->first();
+                        $bigThumbnail = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                                    ->where('category_id', $firstCategory->id)
+                                                                                    ->where('bigthumbnail', 1)
+                                                                                    ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                                    ->orderByDesc('posts.id')
+                                                                                    ->first();
+                        $postItemThumbnails = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $firstCategory->id)
+                        ->where('bigthumbnail', NULL)
+                        ->orderByDesc('id')
+                        ->limit(3)->get();
+                @endphp
+                <!-- news-start -->
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
                             <div class="bg-one">
-                                <div class="cetagory-title"><a href="#">National <span>More <i
-                                                class="fa fa-angle-double-right" aria-hidden="true"></i></span></a>
-                                </div>
+                                @if(Session()->get('lang') == 'English')
+                                    <div class="cetagory-title"><a href="#">{{$bigThumbnail->category_en}} <span>More <i
+                                                    class="fa fa-angle-double-right" aria-hidden="true"></i></span></a>
+                                    </div>
+                                @else
+                                    <div class="cetagory-title"><a href="#">{{$bigThumbnail->category_vie}} <span>Xem thêm <i
+                                                    class="fa fa-angle-double-right" aria-hidden="true"></i></span></a>
+                                    </div>
+                                @endif
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <div class="top-news">
-                                            <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}"
-                                                             alt="Notebook"></a>
-                                            <h4 class="heading-02"><a href="#">Dhaka ranks worst in air quality
-                                                    index</a>
-                                            </h4>
+                                            <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnail->id)}}"><img
+                                                    src="{{\Illuminate\Support\Facades\URL::to($bigThumbnail->image)}}"
+                                                    alt="Notebook"></a>
+                                            @if(Session()->get('lang') == 'English')
+                                                <h4 class="heading-02"><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnail->id)}}">{{$bigThumbnail->title_en}}</a>
+                                                </h4>
+                                            @else
+                                                <h4 class="heading-02"><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnail->id)}}">{{$bigThumbnail->title_vie}}</a>
+                                                </h4>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="image-title">
-                                            <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}"
-                                                             alt="Notebook"></a>
-                                            <h4 class="heading-03"><a href="#">Dhaka ranks worst in air quality
-                                                    index</a>
-                                            </h4>
+                                    @foreach($postItemThumbnails as $postItem)
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="image-title">
+                                                <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItem->id)}}"><img
+                                                        src="{{\Illuminate\Support\Facades\URL::to($postItem->image)}}"
+                                                        alt="Notebook"></a>
+                                                @if(Session()->get('lang') == 'English')
+                                                    <h4 class="heading-02"><a
+                                                            href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItem->id)}}">{{\Illuminate\Support\Str::limit($postItem->title_en, 30)}}</a>
+                                                    </h4>
+                                                @else
+                                                    <h4 class="heading-02"><a
+                                                            href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItem->id)}}">{{\Illuminate\Support\Str::limit($postItem->title_vie, 30)}}</a>
+                                                    </h4>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="image-title">
-                                            <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}"
-                                                             alt="Notebook"></a>
-                                            <h4 class="heading-03"><a href="#">Dhaka ranks worst in air quality
-                                                    index</a>
-                                            </h4>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
+
+                        @php
+                            $secondCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'MONEY')->first();
+                          $bigThumbnailSecond = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                                      ->where('category_id', $secondCategory->id)
+                                                                                      ->where('bigthumbnail', 1)
+                                                                                      ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                                      ->orderByDesc('posts.id')
+                                                                                      ->first();
+                          $postItemThumbnailSeconds = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $secondCategory->id)
+                          ->where('bigthumbnail', NULL)
+                          ->orderByDesc('id')
+                          ->limit(3)->get();
+                        @endphp
                         <div class="col-md-6 col-sm-6">
                             <div class="bg-one">
-                                <div class="cetagory-title"><a href="#">Sports<span>More <i
-                                                class="fa fa-angle-double-right"
-                                                aria-hidden="true"></i></span></a>
-                                </div>
+                                @if(Session()->get('lang') == 'English')
+                                    <div class="cetagory-title"><a href="#">{{$bigThumbnailSecond->category_en}} <span>More <i
+                                                    class="fa fa-angle-double-right" aria-hidden="true"></i></span></a>
+                                    </div>
+                                @else
+                                    <div class="cetagory-title"><a href="#">{{$bigThumbnailSecond->category_vie}} <span>Xem thêm <i
+                                                    class="fa fa-angle-double-right" aria-hidden="true"></i></span></a>
+                                    </div>
+                                @endif
                                 <div class="row">
                                     <div class="col-md-6 col-sm-6">
                                         <div class="top-news">
-                                            <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}"
-                                                             alt="Notebook"></a>
-                                            <h4 class="heading-02"><a href="#">Germany claim first Nations League
-                                                    win</a>
-                                            </h4>
+                                            <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSecond->id)}}"><img
+                                                    src="{{\Illuminate\Support\Facades\URL::to($bigThumbnailSecond->image)}}"
+                                                    alt="Notebook"></a>
+                                            @if(Session()->get('lang') == 'English')
+                                                <h4 class="heading-02"><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSecond->id)}}">{{$bigThumbnailSecond->title_en}}</a>
+                                                </h4>
+                                            @else
+                                                <h4 class="heading-02"><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSecond->id)}}">{{$bigThumbnailSecond->title_vie}}</a>
+                                                </h4>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="image-title">
-                                            <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}"
-                                                             alt="Notebook"></a>
-                                            <h4 class="heading-03"><a href="#">Germany claim first Nations League
-                                                    win</a>
-                                            </h4>
+                                    @foreach($postItemThumbnailSeconds as $postItemSecond)
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="image-title">
+                                                <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSecond->id)}}"><img
+                                                        src="{{\Illuminate\Support\Facades\URL::to($postItemSecond->image)}}"
+                                                        alt="Notebook"></a>
+                                                @if(Session()->get('lang') == 'English')
+                                                    <h4 class="heading-02"><a
+                                                            href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSecond->id)}}">{{\Illuminate\Support\Str::limit($postItemSecond->title_en, 30)}}</a>
+                                                    </h4>
+                                                @else
+                                                    <h4 class="heading-02"><a
+                                                            href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSecond->id)}}">{{\Illuminate\Support\Str::limit($postItemSecond->title_vie, 30)}}</a>
+                                                    </h4>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="image-title">
-                                            <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}"
-                                                             alt="Notebook"></a>
-                                            <h4 class="heading-03"><a href="#">Germany claim first Nations League
-                                                    win</a>
-                                            </h4>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="col-md-3 col-sm-3">
                     <!-- add-start -->
@@ -210,21 +244,20 @@
                             </div>
                         </div>
                     </div><!-- /.add-close -->
-
                     <!-- youtube-live-start -->
-                    <div class="cetagory-title-03">Live TV</div>
-                    <div class="photo">
-                        <div class="embed-responsive embed-responsive-16by9 embed-responsive-item"
-                             style="margin-bottom:5px;">
-
-                            <iframe width="729" height="410" src="https://www.youtube.com/embed/S81Kte7X9uk"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen></iframe>
-                        </div>
-                    </div><!-- /.youtube-live-close -->
-
-                    <!-- facebook-page-start -->
+                    @php
+                        $livetvs = \Illuminate\Support\Facades\DB::table('livetvs')->first();
+                    @endphp
+                    @if($livetvs->status == 1)
+                        <div class="cetagory-title-03">Live TV</div>
+                        <div class="photo">
+                            <div class="embed-responsive embed-responsive-16by9 embed-responsive-item"
+                                 style="margin-bottom:5px;">
+                                {!! html_entity_decode($livetvs->embed_code) !!}
+                            </div>
+                        </div><!-- /.youtube-live-close -->
+                @endif
+                <!-- facebook-page-start -->
                     <div class="cetagory-title-03">Facebook</div>
                     <div class="fb-root">
                         facebook page here
@@ -247,138 +280,265 @@
     <section class="news-section">
         <div class="container-fluid">
             <div class="row">
+                @php
+                    $thirdCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'MOTORS')->first();
+                  $bigThumbnailThird = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                              ->where('category_id', $thirdCategory->id)
+                                                                              ->where('bigthumbnail', 1)
+                                                                              ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                              ->orderByDesc('posts.id')
+                                                                              ->first();
+                  $postItemThumbnailThirds = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $thirdCategory->id)
+                  ->where('bigthumbnail', NULL)
+                  ->orderByDesc('id')
+                  ->limit(3)->get();
+                @endphp
                 <div class="col-md-6 col-sm-6">
                     <div class="bg-one">
-                        <div class="cetagory-title-02"><a href="#">International <i class="fa fa-angle-right"
-                                                                                    aria-hidden="true"></i> <span><i
-                                        class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                        @if(Session()->get('lang') == 'English')
+                            <div class="cetagory-title-02"><a href="#">{{$thirdCategory->category_en}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                        @else
+                            <div class="cetagory-title-02"><a href="#">{{$thirdCategory->category_vie}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>Xem thêm  </span></a></div>
+                        @endif
+
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="top-news">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-02"><a href="#">Armenia, Azerbaijan accused of breaking truce</a>
-                                    </h4>
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailThird->id)}}"><img
+                                            src="{{\Illuminate\Support\Facades\URL::to($bigThumbnailThird->image)}}"
+                                            alt="Notebook"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailThird->id)}}">{{$bigThumbnailThird->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailThird->id)}}">{{$bigThumbnailThird->title_vie}}</a>
+                                        </h4>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Armenia, Azerbaijan accused of breaking truce</a>
-                                    </h4>
+                            @foreach($postItemThumbnailThirds as $postItemThird)
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="image-title">
+                                        <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemThird->id)}}"><img
+                                                src="{{\Illuminate\Support\Facades\URL::to($postItemThird->image)}}"
+                                                alt="Notebook"></a>
+                                        @if(Session()->get('lang') == 'English')
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemThird->id)}}">{{\Illuminate\Support\Str::limit($postItemThird->title_en, 30)}}</a>
+                                            </h4>
+                                        @else
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemThird->id)}}">{{\Illuminate\Support\Str::limit($postItemThird->title_vie, 30)}}</a>
+                                            </h4>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Armenia, Azerbaijan accused of breaking truce</a>
-                                    </h4>
-                                </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Armenia, Azerbaijan accused of breaking truce</a>
-                                    </h4>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
+
+                @php
+                    $fourthCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'BUSINESS')->first();
+                  $bigThumbnailFourth = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                              ->where('category_id', $fourthCategory->id)
+                                                                              ->where('bigthumbnail', 1)
+                                                                              ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                              ->orderByDesc('posts.id')
+                                                                              ->first();
+                  $postItemThumbnailFourths = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $fourthCategory->id)
+                  ->where('bigthumbnail', NULL)
+                  ->orderByDesc('id')
+                  ->limit(3)->get();
+                @endphp
                 <div class="col-md-6 col-sm-6">
                     <div class="bg-one">
-                        <div class="cetagory-title-02"><a href="#">Politics <i class="fa fa-angle-right"
-                                                                               aria-hidden="true"></i> <span><i
-                                        class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                        @if(Session()->get('lang') == 'English')
+                            <div class="cetagory-title-02"><a href="#">{{$fourthCategory->category_en}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                        @else
+                            <div class="cetagory-title-02"><a href="#">{{$fourthCategory->category_vie}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>Xem thêm  </span></a></div>
+                        @endif
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="top-news">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-02"><a href="#">BNP introduced culture of impunity: Quader</a>
-                                    </h4>
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailFourth->id)}}"><img
+                                            src="{{\Illuminate\Support\Facades\URL::to($bigThumbnailFourth->image)}}"
+                                            alt="Notebook"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailFourth->id)}}">{{$bigThumbnailFourth->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailFourth->id)}}">{{$bigThumbnailFourth->title_vie}}</a>
+                                        </h4>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">BNP introduced culture of impunity: Quader</a>
-                                    </h4>
+                            @foreach($postItemThumbnailFourths as $postItemFourth)
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="image-title">
+                                        <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemFourth->id)}}"><img
+                                                src="{{\Illuminate\Support\Facades\URL::to($postItemFourth->image)}}"
+                                                alt="Notebook"></a>
+                                        @if(Session()->get('lang') == 'English')
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemFourth->id)}}">{{\Illuminate\Support\Str::limit($postItemFourth->title_en, 30)}}</a>
+                                            </h4>
+                                        @else
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemFourth->id)}}">{{\Illuminate\Support\Str::limit($postItemFourth->title_vie, 30)}}</a>
+                                            </h4>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">BNP introduced culture of impunity: Quader</a>
-                                    </h4>
-                                </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">BNP introduced culture of impunity: Quader</a>
-                                    </h4>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
             <!-- ******* -->
             <div class="row">
+                @php
+                    $fifthCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'ENTERTAINMENT')->first();
+                  $bigThumbnailFifth = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                              ->where('category_id', $fifthCategory->id)
+                                                                              ->where('bigthumbnail', 1)
+                                                                              ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                              ->orderByDesc('posts.id')
+                                                                              ->first();
+                  $postItemThumbnailFifths = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $fifthCategory->id)
+                  ->where('bigthumbnail', NULL)
+                  ->orderByDesc('id')
+                  ->limit(3)->get();
+                @endphp
                 <div class="col-md-6 col-sm-6">
                     <div class="bg-one">
-                        <div class="cetagory-title-02"><a href="#">Biz-Econ<i class="fa fa-angle-right"
-                                                                              aria-hidden="true"></i> <span><i
-                                        class="fa fa-plus" aria-hidden="true"></i> All News  </span></a></div>
+                        @if(Session()->get('lang') == 'English')
+                            <div class="cetagory-title-02"><a href="#">{{$fifthCategory->category_en}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                        @else
+                            <div class="cetagory-title-02"><a href="#">{{$fifthCategory->category_vie}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>Xem thêm  </span></a></div>
+                        @endif
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="top-news">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-02"><a href="#">Israel sends treaty delegation to Bahrain with
-                                            Trump
-                                            aides</a></h4>
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailFifth->id)}}"><img
+                                            src="{{\Illuminate\Support\Facades\URL::to($bigThumbnailFifth->image)}}"
+                                            alt="Notebook"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailFifth->id)}}">{{$bigThumbnailFifth->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailFifth->id)}}">{{$bigThumbnailFifth->title_vie}}</a>
+                                        </h4>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Israel sends treaty delegation to Bahrain with
-                                            Trump
-                                            aides</a></h4>
+                            @foreach($postItemThumbnailFifths as $postItemFifth)
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="image-title">
+                                        <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemFifth->id)}}"><img
+                                                src="{{\Illuminate\Support\Facades\URL::to($postItemFifth->image)}}"
+                                                alt="Notebook"></a>
+                                        @if(Session()->get('lang') == 'English')
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemFifth->id)}}">{{\Illuminate\Support\Str::limit($postItemFifth->title_en, 30)}}</a>
+                                            </h4>
+                                        @else
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemFifth->id)}}">{{\Illuminate\Support\Str::limit($postItemFifth->title_vie, 30)}}</a>
+                                            </h4>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Israel sends treaty delegation to Bahrain with
-                                            Trump
-                                            aides</a></h4>
-                                </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Israel sends treaty delegation to Bahrain with
-                                            Trump
-                                            aides</a></h4>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
+
+                @php
+                    $sixthCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'LIFE STYLE')->first();
+                  $bigThumbnailSixth = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                              ->where('category_id', $sixthCategory->id)
+                                                                              ->where('bigthumbnail', 1)
+                                                                              ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                              ->orderByDesc('posts.id')
+                                                                              ->first();
+                  $postItemThumbnailSixths = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $sixthCategory->id)
+                  ->where('bigthumbnail', NULL)
+                  ->orderByDesc('id')
+                  ->limit(3)->get();
+                @endphp
                 <div class="col-md-6 col-sm-6">
                     <div class="bg-one">
-                        <div class="cetagory-title-02"><a href="#">Education <i class="fa fa-angle-right"
-                                                                                aria-hidden="true"></i> <span><i
-                                        class="fa fa-plus" aria-hidden="true"></i> All News  </span></a></div>
+                        @if(Session()->get('lang') == 'English')
+                            <div class="cetagory-title-02"><a href="#">{{$sixthCategory->category_en}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                        @else
+                            <div class="cetagory-title-02"><a href="#">{{$sixthCategory->category_vie}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>Xem thêm  </span></a></div>
+                        @endif
                         <div class="row">
                             <div class="col-md-6 col-sm-6">
                                 <div class="top-news">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-02"><a href="#">Students won't get form fill-up fee back</a></h4>
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSixth->id)}}"><img
+                                            src="{{\Illuminate\Support\Facades\URL::to($bigThumbnailSixth->image)}}"
+                                            alt="Notebook"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSixth->id)}}">{{$bigThumbnailSixth->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSixth->id)}}">{{$bigThumbnailSixth->title_vie}}</a>
+                                        </h4>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Students won't get form fill-up fee back</a></h4>
+                            @foreach($postItemThumbnailSixths as $postItemSixth)
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="image-title">
+                                        <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSixth->id)}}"><img
+                                                src="{{\Illuminate\Support\Facades\URL::to($postItemSixth->image)}}"
+                                                alt="Notebook"></a>
+                                        @if(Session()->get('lang') == 'English')
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSixth->id)}}">{{\Illuminate\Support\Str::limit($postItemSixth->title_en, 30)}}</a>
+                                            </h4>
+                                        @else
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSixth->id)}}">{{\Illuminate\Support\Str::limit($postItemSixth->title_vie, 30)}}</a>
+                                            </h4>
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Students won't get form fill-up fee back</a></h4>
-                                </div>
-                                <div class="image-title">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-03"><a href="#">Students won't get form fill-up fee back</a></h4>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -401,96 +561,132 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-9 col-sm-9">
-                    <div class="cetagory-title-02"><a href="#">Feature <i class="fa fa-angle-right"
-                                                                          aria-hidden="true"></i>
-                            all district news tab here <span><i class="fa fa-plus"
-                                                                aria-hidden="true"></i> All News  </span></a>
+
+                    @php
+                        $seventhCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'SPORTS')->first();
+                      $bigThumbnailSeven = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                                  ->where('category_id', $seventhCategory->id)
+                                                                                  ->where('bigthumbnail', 1)
+                                                                                  ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                                  ->orderByDesc('posts.id')
+                                                                                  ->first();
+                      $postItemThumbnailSevenths = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $seventhCategory->id)
+                      ->where('bigthumbnail', NULL)
+                      ->orderByDesc('id')
+                      ->limit(3)->get();
+                    @endphp
+                    <div class="col-md-12 col-sm-12">
+                        @if(Session()->get('lang') == 'English')
+                            <div class="cetagory-title-02"><a href="#">{{$seventhCategory->category_en}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                        @else
+                            <div class="cetagory-title-02"><a href="#">{{$seventhCategory->category_vie}} <i
+                                        class="fa fa-angle-right"
+                                        aria-hidden="true"></i> <span><i
+                                            class="fa fa-plus" aria-hidden="true"></i>Xem thêm  </span></a></div>
+                        @endif
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 col-sm-4">
                             <div class="top-news">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">Achieving SDG-4 during COVID-19 Pandemic</a></h4>
+                                <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSeven->id)}}"><img
+                                        src="{{asset($bigThumbnailSeven->image)}}" alt="Notebook"></a>
+                                @if(Session()->get('lang') == 'English')
+                                    <h4 class="heading-02"><a
+                                            href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSeven->id)}}">{{$bigThumbnailSeven->title_en}}</a>
+                                    </h4>
+                                @else
+                                    <h4 class="heading-02"><a
+                                            href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailSeven->id)}}">{{$bigThumbnailSeven->title_vie}}
+                                            c</a></h4>
+                                @endif
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="image-title">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-03"><a href="#">Achieving SDG-4 during COVID-19 Pandemic</a></h4>
+                        @foreach($postItemThumbnailSevenths as $postItemSeven)
+                            <div class="col-md-4 col-sm-4">
+                                <div class="image-title">
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSeven->id)}}"><img
+                                            src="{{asset($postItemSeven->image)}}" alt="Notebook"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-03"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSeven->id)}}">{{$postItemSeven->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-03"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemSeven->id)}}">{{$postItemSeven->title_vie}}</a>
+                                        </h4>
+                                    @endif
+                                </div>
                             </div>
-                            <div class="image-title">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-03"><a href="#">Achieving SDG-4 during COVID-19 Pandemic</a></h4>
-                            </div>
-                            <div class="image-title">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-03"><a href="#">Achieving SDG-4 during COVID-19 Pandemic</a></h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="image-title">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-03"><a href="#">Achieving SDG-4 during COVID-19 Pandemic</a></h4>
-                            </div>
-                            <div class="image-title">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-03"><a href="#">Achieving SDG-4 during COVID-19 Pandemic</a></h4>
-                            </div>
-                            <div class="image-title">
-                                <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                <h4 class="heading-03"><a href="#">Achieving SDG-4 during COVID-19 Pandemic</a></h4>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                     <!-- ******* -->
                     <br/>
                     <div class="row">
+                        @php
+                            $eighthCategory = \Illuminate\Support\Facades\DB::table('categories')->where('category_en', 'SCI-TECH')->first();
+                          $bigThumbnailEight = \Illuminate\Support\Facades\DB::table('posts')->join('categories','posts.category_id', 'categories.id')
+                                                                                      ->where('category_id', $eighthCategory->id)
+                                                                                      ->where('bigthumbnail', 1)
+                                                                                      ->select('posts.*','categories.category_en', 'categories.category_vie')
+                                                                                      ->orderByDesc('posts.id')
+                                                                                      ->first();
+                          $postItemThumbnailEighths = \Illuminate\Support\Facades\DB::table('posts')->where('category_id', $eighthCategory->id)
+                          ->where('bigthumbnail', NULL)
+                          ->orderByDesc('id')
+                          ->limit(3)->get();
+                        @endphp
                         <div class="col-md-12 col-sm-12">
-                            <div class="cetagory-title-02"><a href="#">Sci-Tech<i class="fa fa-angle-right"
-                                                                                  aria-hidden="true"></i> <span><i
-                                            class="fa fa-plus" aria-hidden="true"></i> সব খবর  </span></a></div>
+                            @if(Session()->get('lang') == 'English')
+                                <div class="cetagory-title-02"><a href="#">{{$eighthCategory->category_en}} <i
+                                            class="fa fa-angle-right"
+                                            aria-hidden="true"></i> <span><i
+                                                class="fa fa-plus" aria-hidden="true"></i>All News  </span></a></div>
+                            @else
+                                <div class="cetagory-title-02"><a href="#">{{$eighthCategory->category_vie}} <i
+                                            class="fa fa-angle-right"
+                                            aria-hidden="true"></i> <span><i
+                                                class="fa fa-plus" aria-hidden="true"></i>Xem thêm  </span></a></div>
+                            @endif
                         </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="bg-gray">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
                                 <div class="top-news">
-                                    <a href="#"><img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Notebook"></a>
-                                    <h4 class="heading-02"><a href="#">Facebook Messenger gets shiny new logo </a></h4>
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailEight->id)}}"><img
+                                            src="{{asset($bigThumbnailEight->image)}}" alt="Notebook"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailEight->id)}}">{{$bigThumbnailEight->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('/view/post', $bigThumbnailEight->id)}}">{{$bigThumbnailEight->title_vie}}
+                                                c</a></h4>
+                                    @endif
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="news-title">
-                                <a href="#">Facebook Messenger gets shiny new logo </a>
-                            </div>
-                            <div class="news-title">
-                                <a href="#">Facebook Messenger gets shiny new logo </a>
-                            </div>
-                            <div class="news-title">
-                                <a href="#">Facebook Messenger gets shiny new logo</a>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="news-title">
-                                <a href="#">Facebook Messenger gets shiny new logo </a>
-                            </div>
-                            <div class="news-title">
-                                <a href="#">Facebook Messenger gets shiny new logo </a>
-                            </div>
-                            <div class="news-title">
-                                <a href="#">Facebook Messenger gets shiny new logo </a>
-                            </div>
+                            @foreach($postItemThumbnailEighths as $postItemEight)
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="image-title">
+                                        <a href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemEight->id)}}"><img
+                                                src="{{asset($postItemEight->image)}}" alt="Notebook"></a>
+                                        @if(Session()->get('lang') == 'English')
+                                            <h4 class="heading-03"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemEight->id)}}">{{$postItemEight->title_en}}</a>
+                                            </h4>
+                                        @else
+                                            <h4 class="heading-03"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('/view/post', $postItemEight->id)}}">{{$postItemEight->title_vie}}</a>
+                                            </h4>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="sidebar-add">
-                                <img src="{{asset('frontend/assets/img/top-ad.jpg')}}" alt=""/>
-                            </div>
-                        </div>
-                    </div><!-- /.add-close -->
-
 
                 </div>
                 <div class="col-md-3 col-sm-3">
@@ -514,58 +710,10 @@
                                         <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
                                         </h4>
                                     </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="tab22">
                                 <div class="news-titletab">
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
                                     <div class="news-title-02">
                                         <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
                                         </h4>
@@ -578,38 +726,14 @@
                                         <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
                                         </h4>
                                     </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- Namaj Times -->
-                    <div class="cetagory-title-03">Prayer Time</div>
-                    Prayer Times count option here
-                    <!-- Namaj Times -->
+                {{--                    <div class="cetagory-title-03">Prayer Time</div>--}}
+                {{--                    Prayer Times count option here--}}
+                <!-- Namaj Times -->
                     <div class="cetagory-title-03">Old News</div>
                     <form action="" method="post">
                         <div class="old-news-date">
@@ -622,52 +746,36 @@
                     </form>
                     <!-- news -->
                     <br><br><br><br><br>
-                    <div class="cetagory-title-04"> Important Website</div>
-                    <div class="">
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved </a></h4>
+                    @php
+                        $websites = \Illuminate\Support\Facades\DB::table('websites')->get();
+                    @endphp
+                    @if(Session()->get('lang') == 'English')
+                        <div class="cetagory-title-04"> Important Website</div>
+                    @else
+                        <div class="cetagory-title-04"> Trang web quan trong</div>
+                    @endif
+                    @foreach($websites as $website)
+                        <div class="">
+                            <div class="news-title-02">
+                                <h4 class="heading-03"><a href="{{$website->website_link}}" target="_blank"><i
+                                            class="fa fa-check"
+                                            aria-hidden="true"></i>
+                                        {{$website->website_name}} </a></h4>
+                            </div>
                         </div>
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved</a></h4>
-                        </div>
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved </a></h4>
-                        </div>
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved </a></h4>
-                        </div>
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved </a></h4>
-                        </div>
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved </a></h4>
-                        </div>
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved </a></h4>
-                        </div>
-                        <div class="news-title-02">
-                            <h4 class="heading-03"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Both
-                                    education
-                                    and life must be saved </a></h4>
-                        </div>
-                    </div>
-
+                    @endforeach
                 </div>
+
             </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="sidebar-add">
+                        <img src="{{asset('frontend/assets/img/top-ad.jpg')}}" alt=""/>
+                    </div>
+                </div>
+            </div><!-- /.add-close -->
+
+        </div>
         </div>
     </section><!-- /.3rd-news-section-close -->
 

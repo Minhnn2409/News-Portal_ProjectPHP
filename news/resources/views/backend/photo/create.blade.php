@@ -11,12 +11,23 @@
 
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <label for="exampleInputName1">Title</label>
+                            <label for="exampleInputName1">English Title</label>
                             <input type="text" class="form-control" id="exampleInputName1"
-                                   placeholder="Type title" name="title">
+                                   placeholder="Type English title" name="title_en">
                         </div>
                     </div>
-                    @error('title')
+                    @error('title_en')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="exampleInputName1">Vietnamese title</label>
+                            <input type="text" class="form-control" id="exampleInputName1"
+                                   placeholder="Type Vietnamese title" name="title_vie">
+                        </div>
+                    </div>
+                    @error('title_vie')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
 

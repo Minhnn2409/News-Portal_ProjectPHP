@@ -4,7 +4,8 @@
         <div class="row">
             <div class="col-xs-6 col-md-2 col-sm-4">
                 <div class="header_logo">
-                    <a href=""><img src="frontend/assets/img/demo_logo.png"></a>
+                    <a href="{{\Illuminate\Support\Facades\URL::to('/')}}"><img
+                            src="{{asset('frontend/assets/img/demo_logo.png')}} "></a>
                 </div>
             </div>
             <div class="col-xs-6 col-md-8 col-sm-8">
@@ -31,14 +32,17 @@
                                         <li class="dropdown">
 
                                             <a href="#" class="dropdown-toggle"
-                                               data-toggle="dropdown">{{$category->category_en}} <b
+                                               data-toggle="dropdown">{{(Session()->get('lang') == 'English')?$category->category_en : $category->category_vie}}
+                                                <b
                                                     class="caret"></b></a>
                                             @php
                                                 $subcategories = \Illuminate\Support\Facades\DB::table('subcategories')->where('category_id', $category->id)->get();
                                             @endphp
                                             <ul class="dropdown-menu">
                                                 @foreach($subcategories as $subcategory)
-                                                    <li><a href="#">{{$subcategory->subcategory_en}}</a></li>
+                                                    <li>
+                                                        <a href="#">{{(Session()->get('lang') == 'English')?$subcategory->subcategory_en : $subcategory->subcategory_vie}}</a>
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         </li>
@@ -53,8 +57,12 @@
                 <div class="header-icon">
                     <ul>
                         <!-- version-start -->
-                        <li class="version"><a href="#"><B>Vietnamese</B></a></li>&nbsp;&nbsp;&nbsp;
-                        <!-- login-start -->
+                        @if(Session()->get('lang') == 'English')
+                            <li class="version"><a href="{{route('vie.lang')}}"><B>Vietnamese</B></a></li>
+                        @else
+                            <li class="version"><a href="{{route('en.lang')}}"><B>Tieng Anh</B></a></li>
+                        @endif
+                    <!-- login-start -->
 
                         <!-- search-start -->
                         <li>
@@ -97,14 +105,21 @@
                             </div>
                         </li>
                         <!-- social-start -->
+                        @php
+                            $social = \Illuminate\Support\Facades\DB::table('socials')->first();
+                        @endphp
                         <li>
                             <div class="dropdown">
                                 <button class="dropbtn-02"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
                                 <div class="dropdown-content">
-                                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i> Facebook</a>
-                                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter</a>
-                                    <a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i> Youtube</a>
-                                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram</a>
+                                    <a href="{{$social->facebook}}"><i class="fa fa-facebook" aria-hidden="true"></i>
+                                        Facebook</a>
+                                    <a href="{{$social->twitter}}"><i class="fa fa-twitter" aria-hidden="true"></i>
+                                        Twitter</a>
+                                    <a href="{{$social->youtube}}"><i class="fa fa-youtube-play" aria-hidden="true"></i>
+                                        Youtube</a>
+                                    <a href="{{$social->instagram}}"><i class="fa fa-instagram" aria-hidden="true"></i>
+                                        Instagram</a>
                                 </div>
                             </div>
                         </li>

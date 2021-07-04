@@ -116,3 +116,11 @@ Route::post('/videos/store', [\App\Http\Controllers\backend\GalleryController::c
 Route::get('/videos/edit/{id}', [\App\Http\Controllers\backend\GalleryController::class, 'VideoEdit'])->name('videos.edit');
 Route::post('/videos/update/{id}', [\App\Http\Controllers\backend\GalleryController::class, 'VideoUpdate'])->name('videos.update');
 Route::get('/videos/delete/{id}', [\App\Http\Controllers\backend\GalleryController::class, 'VideoDelete'])->name('videos.delete');
+
+//FrontEnd
+Route::get('/English', [\App\Http\Controllers\frontend\ExtraController::class, 'EngLish'])->name('en.lang');
+Route::get('/Vietnamese', [\App\Http\Controllers\frontend\ExtraController::class, 'Vietnamese'])->name('vie.lang');
+
+//Detail Post
+Route::get('/view/post/{id}', [\App\Http\Controllers\frontend\ExtraController::class, 'SinglePost']);
+
