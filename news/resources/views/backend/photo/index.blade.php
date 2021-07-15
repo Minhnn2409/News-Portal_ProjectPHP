@@ -54,7 +54,8 @@
                             @foreach($photos as $photo)
                                 <tr>
                                     <td> {{$i++}}</td>
-                                    <td> {{$photo->title_en}} | {{$photo->title_vie}}</td>
+                                    <td> {{\Illuminate\Support\Str::limit($photo->title_en, 50)}}
+                                        | {{\Illuminate\Support\Str::limit($photo->title_vie, 50)}}</td>
                                     <td><small
                                             class="badge badge-info">{{($photo->type == 1) ? 'Big Image' : 'Small Image'}}</small>
                                     </td>

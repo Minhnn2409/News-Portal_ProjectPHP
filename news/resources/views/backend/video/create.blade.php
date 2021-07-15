@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <label for="exampleInputUsername1">Video English Title</label>
                             <input type="text" class="form-control" id="exampleInputUsername1" name="title_en"
-                                   placeholder="Please English type title">
+                                   placeholder="Please type English title">
                         </div>
                         @error('title_en')
                         <div class="alert alert-danger">{{ $message }}</div>
@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label for="exampleInputUsername1">Video Vietnamese Title</label>
                             <input type="text" class="form-control" id="exampleInputUsername1" name="title_vie"
-                                   placeholder="Please Vietnamese type title">
+                                   placeholder="Please type Vietnamese title">
                         </div>
                         @error('title_vie')
                         <div class="alert alert-danger">{{ $message }}</div>

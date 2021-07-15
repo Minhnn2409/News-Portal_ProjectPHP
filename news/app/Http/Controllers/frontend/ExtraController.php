@@ -34,6 +34,9 @@ class ExtraController extends Controller
             ->join('users', 'posts.user_id', 'users.id')
             ->select('posts.*', 'categories.category_en', 'categories.category_vie', 'subcategories.subcategory_en', 'subcategories.subcategory_vie', 'users.name')
             ->where('posts.id', $id)->first();
-        return view('frontend.singlePost', compact('singlePost'));
+
+        $relatedPostsRow1 = DB::table('posts')->where('category_id', $singlePost->category_id)->orderByDesc('id')->limit(3)->get();
+        $relatedPostsRow2 = DB::table('posts')->where('category_id', $singlePost->category_id)->orderByDesc('id')->skip(3)->limit(3)->get();
+        return view('frontend.singlePost', compact('singlePost', 'relatedPostsRow1', 'relatedPostsRow2'));
     }
 }

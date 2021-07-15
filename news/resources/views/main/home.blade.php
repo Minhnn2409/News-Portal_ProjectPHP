@@ -31,19 +31,63 @@
     </section><!-- /.date-close -->
 
     <!-- notice-start -->
+    @php
+        $headlines = \Illuminate\Support\Facades\DB::table('posts')->where('headline', 1)->limit(3)->get();
+        $notice = \Illuminate\Support\Facades\DB::table('notices')->first();
+    @endphp
+
+    {{--    BREAKING NEWS--}}
 
     <section>
         <div class="container-fluid">
             <div class="row scroll">
-                <div class="col-md-2 col-sm-3 scroll_01 ">
-                    Breaking News :
-                </div>
+                @if(Session()->get('lang') == 'English')
+                    <div class="col-md-2 col-sm-3 scroll_01 ">
+                        Breaking News :
+                    </div>
+                @else
+                    <div class="col-md-2 col-sm-3 scroll_01 ">
+                        Tin nhanh :
+                    </div>
+                @endif
                 <div class="col-md-10 col-sm-9 scroll_02">
-                    <marquee>wellcome to our website...</marquee>
+                    <marquee>
+                        @foreach($headlines as $headline)
+                            @if(Session()->get('lang') == 'English')
+                                &nbsp;&nbsp;**&nbsp;{{$headline->title_en}}&nbsp;**&nbsp;&nbsp;
+                            @else
+                                &nbsp;&nbsp;**&nbsp;{{$headline->title_vie}}&nbsp;**&nbsp;&nbsp;
+                            @endif
+                        @endforeach
+                    </marquee>
                 </div>
             </div>
         </div>
     </section>
+
+    {{--    NOTICES--}}
+    @if($notice->status == 1)
+        <section>
+            <div class="container-fluid">
+                <div class="row scroll">
+                    @if(Session()->get('lang') == 'English')
+                        <div class="col-md-2 col-sm-3 scroll_01" style="background-color: greenyellow">
+                            Notices :
+                        </div>
+                    @else
+                        <div class="col-md-2 col-sm-3 scroll_01" style="background-color: greenyellow">
+                            Chú ý :
+                        </div>
+                    @endif
+                    <div class="col-md-10 col-sm-9 scroll_02" style="background-color: orangered">
+                        <marquee>
+                            {!! $notice->notice !!}
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <!-- 1st-news-section-start -->
     <section class="news-section">
@@ -687,84 +731,11 @@
                             @endforeach
                         </div>
                     </div>
-
                 </div>
-                <div class="col-md-3 col-sm-3">
-                    <div class="tab-header">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs nav-justified" role="tablist">
-                            <li role="presentation" class="active"><a href="#tab21" aria-controls="tab21" role="tab"
-                                                                      data-toggle="tab" aria-expanded="false">Latest</a>
-                            </li>
-                            <li role="presentation"><a href="#tab22" aria-controls="tab22" role="tab" data-toggle="tab"
-                                                       aria-expanded="true">Popular</a></li>
-                            <li role="presentation"><a href="#tab23" aria-controls="tab23" role="tab" data-toggle="tab"
-                                                       aria-expanded="true">Popular1</a></li>
-                        </ul>
 
-                        <!-- Tab panes -->
-                        <div class="tab-content ">
-                            <div role="tabpanel" class="tab-pane in active" id="tab21">
-                                <div class="news-titletab">
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab22">
-                                <div class="news-titletab">
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="tab23">
-                                <div class="news-titletab">
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Both education and life must be saved</a>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Namaj Times -->
-                {{--                    <div class="cetagory-title-03">Prayer Time</div>--}}
-                {{--                    Prayer Times count option here--}}
-                <!-- Namaj Times -->
-                    <div class="cetagory-title-03">Old News</div>
-                    <form action="" method="post">
-                        <div class="old-news-date">
-                            <input type="text" name="from" placeholder="From Date" required="">
-                            <input type="text" name="" placeholder="To Date">
-                        </div>
-                        <div class="old-date-button">
-                            <input type="submit" value="search ">
-                        </div>
-                    </form>
-                    <!-- news -->
-                    <br><br><br><br><br>
-                    @php
-                        $websites = \Illuminate\Support\Facades\DB::table('websites')->get();
-                    @endphp
-                    @if(Session()->get('lang') == 'English')
-                        <div class="cetagory-title-04"> Important Website</div>
-                    @else
-                        <div class="cetagory-title-04"> Trang web quan trong</div>
-                    @endif
-                    @foreach($websites as $website)
-                        <div class="">
-                            <div class="news-title-02">
-                                <h4 class="heading-03"><a href="{{$website->website_link}}" target="_blank"><i
-                                            class="fa fa-check"
-                                            aria-hidden="true"></i>
-                                        {{$website->website_name}} </a></h4>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
+                {{--                Sidebar NEWS--}}
+                @include('main.body.sidebarNews')
+{{--                End Sidebar News--}}
 
             </div>
             <div class="row">
@@ -785,58 +756,43 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-8 col-sm-7">
-                    <div class="gallery_cetagory-title"> Photo Gallery</div>
+                    @if(Session()->get('lang') == 'English')
+                        <div class="gallery_cetagory-title"> Photo Gallery</div>
+                    @else
+                        <div class="gallery_cetagory-title"> Thư viện ảnh</div>
+                    @endif
 
+                    @php
+                        $bigPhoto = \Illuminate\Support\Facades\DB::table('photos')->where('type', 1)->first();
+                    $smallPhotos = \Illuminate\Support\Facades\DB::table('photos')->where('type', 0)->get();
+                    @endphp
                     <div class="row">
                         <div class="col-md-8 col-sm-8">
                             <div class="photo_screen">
                                 <div class="myPhotos" style="width:100%">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Avatar">
+                                    <img src="{{asset($bigPhoto->photo)}}" alt="Avatar">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <div class="photo_list_bg">
 
-                                <div class="photo_img photo_border active">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="image"
-                                         onclick="currentDiv(1)">
-                                    <div class="heading-03">
-                                        Casting of Israeli actress as Cleopatra sparks anger
-                                    </div>
-                                </div>
+                                @foreach($smallPhotos as $photoItem)
+                                    <div class="photo_img photo_border">
+                                        <img src="{{asset($photoItem->photo)}}" alt="image"
+                                             onclick="currentDiv(1)">
+                                        @if(Session()->get('lang') == 'English')
+                                            <div class="heading-03">
+                                                {{$photoItem->title_en}}
+                                            </div>
+                                        @else
+                                            <div class="heading-03">
+                                                {{$photoItem->title_vie}}
+                                            </div>
+                                        @endif
 
-                                <div class="photo_img photo_border">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="image"
-                                         onclick="currentDiv(1)">
-                                    <div class="heading-03">
-                                        Casting of Israeli actress as Cleopatra sparks anger
                                     </div>
-                                </div>
-
-                                <div class="photo_img photo_border">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="image"
-                                         onclick="currentDiv(1)">
-                                    <div class="heading-03">
-                                        Casting of Israeli actress as Cleopatra sparks anger
-                                    </div>
-                                </div>
-
-                                <div class="photo_img photo_border">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="image"
-                                         onclick="currentDiv(1)">
-                                    <div class="heading-03">
-                                        Casting of Israeli actress as Cleopatra sparks anger
-                                    </div>
-                                </div>
-
-                                <div class="photo_img photo_border">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="image"
-                                         onclick="currentDiv(1)">
-                                    <div class="heading-03">
-                                        Casting of Israeli actress as Cleopatra sparks anger
-                                    </div>
-                                </div>
+                                @endforeach
 
                             </div>
                         </div>
@@ -885,18 +841,23 @@
 
                 </div>
                 <div class="col-md-4 col-sm-5">
-                    <div class="gallery_cetagory-title"> photo Gallery</div>
+                    @if(Session()->get('lang') == 'English')
+                        <div class="gallery_cetagory-title"> Video Gallery</div>
+                    @else
+                        <div class="gallery_cetagory-title"> Thư viện video</div>
+                    @endif
+
+                    @php
+                        $bigVideo = \Illuminate\Support\Facades\DB::table('videos')->where('type', 1)->first();
+                    $smallVideos = \Illuminate\Support\Facades\DB::table('videos')->where('type', 0)->get();
+                    @endphp
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
                             <div class="video_screen">
                                 <div class="myVideos" style="width:100%">
                                     <div class="embed-responsive embed-responsive-16by9 embed-responsive-item">
-                                        <iframe width="853" height="480"
-                                                src="https://www.youtube.com/embed/AWM8164ksVY?list=RDAWM8164ksVY"
-                                                frameborder="0"
-                                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                                allowfullscreen></iframe>
+                                        {!! $bigVideo->embed_code !!}
                                     </div>
                                 </div>
                             </div>
@@ -908,41 +869,25 @@
 
                             <div class="gallery_sec owl-carousel">
 
-                                <div class="video_image" style="width:100%" onclick="currentDivs(1)">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Avatar">
-                                    <div class="heading-03">
-                                        <div class="content_padding">
-                                            Kumar Sanu tests positive for coronavirus
+                                @foreach($smallVideos as $smallVideo)
+                                    <div class="video_image" style="width:100%" onclick="currentDivs(1)">
+                                        <div class="embed-responsive embed-responsive-16by9 embed-responsive-item"
+                                             style="margin-bottom:5px;">
+                                            {!! html_entity_decode($smallVideo->embed_code) !!}
+                                        </div>
+                                        <div class="heading-03">
+                                            @if(Session()->get('lang') == 'English')
+                                                <div class="content_padding">
+                                                    {{$smallVideo->title_en}}
+                                                </div>
+                                            @else
+                                                <div class="content_padding">
+                                                    {{$smallVideo->title_vie}}
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="video_image" style="width:100%" onclick="currentDivs(1)">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Avatar">
-                                    <div class="heading-03">
-                                        <div class="content_padding">
-                                            Kumar Sanu tests positive for coronavirus
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="video_image" style="width:100%" onclick="currentDivs(1)">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Avatar">
-                                    <div class="heading-03">
-                                        <div class="content_padding">
-                                            Kumar Sanu tests positive for coronavirus
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="video_image" style="width:100%" onclick="currentDivs(1)">
-                                    <img src="{{asset('frontend/assets/img/news.jpg')}}" alt="Avatar">
-                                    <div class="heading-03">
-                                        <div class="content_padding">
-                                            Kumar Sanu tests positive for coronavirus
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
 
                             </div>
                         </div>

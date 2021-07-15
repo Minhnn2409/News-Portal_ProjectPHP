@@ -33,11 +33,19 @@
                     <form class="forms-sample" method="post" action="{{route('videos.update', $video->id)}}">
                         @csrf
                         <div class="form-group">
-                            <label for="exampleInputUsername1">Video Title</label>
+                            <label for="exampleInputUsername1">Video English Title</label>
                             <input type="text" class="form-control" id="exampleInputUsername1" name="title"
-                                   placeholder="Please type title" value="{{$video->title}}">
+                                   placeholder="Please English type title" value="{{$video->title_en}}">
                         </div>
-                        @error('title')
+                        @error('title_en')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                        <div class="form-group">
+                            <label for="exampleInputUsername1">Video Vietnamese Title</label>
+                            <input type="text" class="form-control" id="exampleInputUsername1" name="title"
+                                   placeholder="Please type Vietnamese title" value="{{$video->title_vie}}">
+                        </div>
+                        @error('title_vie')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <div class="form-group">

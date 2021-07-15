@@ -28,11 +28,13 @@ class GalleryController extends Controller
             DB::beginTransaction();
             $validated = $request->validate([
                 'photo' => 'required',
-                'title' => 'required|unique:photos',
+                'title_en' => 'required|unique:photos',
+                'title_vie' => 'required|unique:photos',
                 'type' => 'required',
             ]);
             $data = array();
-            $data['title'] = $request->title;
+            $data['title_en'] = $request->title_en;
+            $data['title_vie'] = $request->title_vie;
             $data['type'] = $request->type;
 
 
@@ -68,7 +70,8 @@ class GalleryController extends Controller
     public function PhotoUpdate(Request $request, $id)
     {
         $data = array();
-        $data['title'] = $request->title;
+        $data['title_en'] = $request->title_en;
+        $data['title_vie'] = $request->title_vie;
         $data['type'] = $request->type;
 
         $newFile = $request->photo;
@@ -116,12 +119,14 @@ class GalleryController extends Controller
     public function VideoStore(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|unique:videos',
+            'title_en' => 'required|unique:videos',
+            'title_vie' => 'required|unique:videos',
             'embed_code' => 'required|unique:videos',
             'type' => 'required',
         ]);
         $data = array();
-        $data['title'] = $request->title;
+        $data['title_en'] = $request->title_en;
+        $data['title_vie'] = $request->title_vie;
         $data['embed_code'] = $request->embed_code;
         $data['type'] = $request->type;
 
@@ -143,7 +148,8 @@ class GalleryController extends Controller
     public function VideoUpdate(Request $request, $id)
     {
         $data = array();
-        $data['title'] = $request->title;
+        $data['title_en'] = $request->title_en;
+        $data['title_vie'] = $request->title_vie;
         $data['embed_code'] = $request->embed_code;
         $data['type'] = $request->type;
 

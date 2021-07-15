@@ -113,65 +113,93 @@
                         @else
                             <div class="col-md-12"><h2 class="heading">Tin tức liên quan</h2></div>
                         @endif
-                        <div class="col-md-4 col-sm-4">
-                            <div class="top-news sng-border-btm">
-                                <a href="#"><img src="assets/img/news.jpg" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">e-CAB shows how to help people during crisis</a></h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="top-news sng-border-btm">
-                                <a href="#"><img src="assets/img/news.jpg" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">e-CAB shows how to help people during crisis</a></h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="top-news sng-border-btm">
-                                <a href="#"><img src="assets/img/news.jpg" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">e-CAB shows how to help people during crisis</a></h4>
-                            </div>
-                        </div>
-                    </div>
+                        @foreach($relatedPostsRow1 as $post1)
 
+                            <div class="col-md-4 col-sm-4">
+                                <div class="top-news sng-border-btm">
+                                    <a href="{{\Illuminate\Support\Facades\URL::to('view/post', $post1->id)}}"><img
+                                            src="{{\Illuminate\Support\Facades\URL::to($post1->image)}}"
+                                            alt="Image Post"></a>
+                                    @if(Session()->get('lang') == 'English')
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('view/post', $post1->id)}}">{{$post1->title_en}}</a>
+                                        </h4>
+                                    @else
+                                        <h4 class="heading-02"><a
+                                                href="{{\Illuminate\Support\Facades\URL::to('view/post', $post1->id)}}">{{$post1->title_vie}}</a>
+                                        </h4>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
 
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4">
-                            <div class="top-news">
-                                <a href="#"><img src="assets/img/news.jpg" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">e-CAB shows how to help people during crisis</a></h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="top-news">
-                                <a href="#"><img src="assets/img/news.jpg" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">e-CAB shows how to help people during crisis</a></h4>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="top-news">
-                                <a href="#"><img src="assets/img/news.jpg" alt="Notebook"></a>
-                                <h4 class="heading-02"><a href="#">e-CAB shows how to help people during crisis</a></h4>
-                            </div>
-                        </div>
                     </div>
+                    @if($relatedPostsRow2 != null)
+                        <div class="row">
+                            @foreach($relatedPostsRow2 as $post2)
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="top-news">
+                                        <a href="{{\Illuminate\Support\Facades\URL::to('view/post', $post2->id)}}"><img
+                                                src="{{\Illuminate\Support\Facades\URL::to($post2->image)}}"
+                                                alt="Image Post"></a>
+                                        @if(Session()->get('lang') == 'English')
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('view/post', $post2->id)}}">{{$post2->title_en}}</a>
+                                            </h4>
+                                        @else
+                                            <h4 class="heading-02"><a
+                                                    href="{{\Illuminate\Support\Facades\URL::to('view/post', $post2->id)}}">{{$post2->title_vie}}</a>
+                                            </h4>
+                                        @endif
+
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
                 </div>
                 <div class="col-md-4 col-sm-4">
                     <!-- add-start -->
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <div class="sidebar-add"><img src="assets/img/add_01.jpg" alt=""/></div>
+                            <div class="sidebar-add"><img src="{{asset('frontend/assets/img/add_01.jpg')}}"
+                                                          alt="Anh gioi thieu"/></div>
                         </div>
                     </div><!-- /.add-close -->
+
+                    @php
+                        $latestPost = \Illuminate\Support\Facades\DB::table('posts')->orderByDesc('posts.id')->limit(5)->get();
+                        $popularPost = \Illuminate\Support\Facades\DB::table('posts')->inRandomOrder()->limit(5)->get();
+                        $highestPost = \Illuminate\Support\Facades\DB::table('posts')->orderBy('id', 'asc')->limit(5)->get();
+                    @endphp
                     <div class="tab-header">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs nav-justified" role="tablist">
-                            <li role="presentation" class="active"><a href="#tab21" aria-controls="tab21" role="tab"
-                                                                      data-toggle="tab" aria-expanded="false">Latest</a>
-                            </li>
-                            <li role="presentation"><a href="#tab22" aria-controls="tab22" role="tab" data-toggle="tab"
-                                                       aria-expanded="true">Popular</a></li>
-                            <li role="presentation"><a href="#tab23" aria-controls="tab23" role="tab" data-toggle="tab"
-                                                       aria-expanded="true">Popular1</a></li>
+                            @if(Session()->get('lang') == 'English')
+                                <li role="presentation" class="active"><a href="#tab21" aria-controls="tab21" role="tab"
+                                                                          data-toggle="tab"
+                                                                          aria-expanded="false">Latest</a>
+                                </li>
+                                <li role="presentation"><a href="#tab22" aria-controls="tab22" role="tab"
+                                                           data-toggle="tab"
+                                                           aria-expanded="true">Popular</a></li>
+                                <li role="presentation"><a href="#tab23" aria-controls="tab23" role="tab"
+                                                           data-toggle="tab"
+                                                           aria-expanded="true">Highest</a></li>
+                            @else
+                                <li role="presentation" class="active"><a href="#tab21" aria-controls="tab21" role="tab"
+                                                                          data-toggle="tab"
+                                                                          aria-expanded="false">Mới</a>
+                                </li>
+                                <li role="presentation"><a href="#tab22" aria-controls="tab22" role="tab"
+                                                           data-toggle="tab"
+                                                           aria-expanded="true">Phổ biến</a></li>
+                                <li role="presentation"><a href="#tab23" aria-controls="tab23" role="tab"
+                                                           data-toggle="tab"
+                                                           aria-expanded="true">Tin hot</a></li>
+                            @endif
+
                         </ul>
 
                         <!-- Tab panes -->
@@ -179,93 +207,63 @@
                             <div role="tabpanel" class="tab-pane in active" id="tab21">
                                 <div class="news-titletab">
                                     <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
+                                        @foreach($latestPost as $latest)
+                                            @if(Session()->get('lang') == 'English')
+                                                <h4 class="heading-03"><i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"></i><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $latest->id)}}">{{$latest->title_en}}</a>
+                                                </h4>
+                                            @else
+                                                <h4 class="heading-03"><i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"></i><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $latest->id)}}">{{$latest->title_vie}}</a>
+                                                </h4>
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="tab22">
                                 <div class="news-titletab">
                                     <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#"> educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#"> educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#"> ducational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#"> educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#"> educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#"> educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#"> educational institutions</a></h4>
+                                        @foreach($popularPost as $popular)
+                                            @if(Session()->get('lang') == 'English')
+                                                <h4 class="heading-03"><i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"></i><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $popular->id)}}">{{$popular->title_en}}</a>
+                                                </h4>
+                                            @else
+                                                <h4 class="heading-03"><i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"></i><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $popular->id)}}">{{$popular->title_vie}}</a>
+                                                </h4>
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="tab23">
                                 <div class="news-titletab">
                                     <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
-                                    </div>
-                                    <div class="news-title-02">
-                                        <h4 class="heading-03"><a href="#">Shutdown of educational institutions</a></h4>
+                                        @foreach($highestPost as $highest)
+                                            @if(Session()->get('lang') == 'English')
+                                                <h4 class="heading-03"><i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"></i><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $highest->id)}}">{{$highest->title_en}}</a>
+                                                </h4>
+                                            @else
+                                                <h4 class="heading-03"><i
+                                                        class="fa fa-check"
+                                                        aria-hidden="true"></i><a
+                                                        href="{{\Illuminate\Support\Facades\URL::to('/view/post', $highest->id)}}">{{$highest->title_vie}}</a>
+                                                </h4>
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -274,7 +272,8 @@
                     <!-- add-start -->
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <div class="sidebar-add"><img src="assets/img/add_01.jpg" alt=""/></div>
+                            <div class="sidebar-add"><img src="{{asset('frontend/assets/img/add_01.jpg')}}" alt=""/>
+                            </div>
                         </div>
                     </div><!-- /.add-close -->
                 </div>

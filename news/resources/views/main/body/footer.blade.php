@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-3 col-sm-4">
                     <div class="foot-logo">
-                        <img src="frontend/assets/img/demofooter.png" style="height: 50px;"/>
+                        <img src="{{asset('frontend/assets/img/demofooter.png')}}" style="height: 50px;"/>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-4">
@@ -23,8 +23,8 @@
                 <div class="col-md-3 col-sm-4">
                     <div class="apps-img">
                         <ul>
-                            <li><a href="#"><img src="frontend/assets/img/apps-01.png" alt=""/></a></li>
-                            <li><a href="#"><img src="frontend/assets/img/apps-02.png" alt=""/></a></li>
+                            <li><a href="#"><img src="{{asset('frontend/assets/img/apps-01.png')}}" alt=""/></a></li>
+                            <li><a href="#"><img src="{{asset('frontend/assets/img/apps-02.png')}}" alt=""/></a></li>
                         </ul>
                     </div>
                 </div>

@@ -53,7 +53,8 @@
                             @foreach($videos as $video)
                                 <tr>
                                     <td> {{$i++}}</td>
-                                    <td> {{$video->title}}</td>
+                                    <td> {{\Illuminate\Support\Str::limit($video->title_en, 50)}}
+                                        | {{\Illuminate\Support\Str::limit($video->title_vie, 50)}}</td>
                                     <td><small
                                             class="badge badge-info">{{($video->type == 1) ? 'Big Video' : 'Small Video'}}</small>
                                     </td>
